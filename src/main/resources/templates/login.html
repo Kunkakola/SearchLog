@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>登陆界面</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- 本地资源导入出现问题，导入成功但是不生效  -->
+    <!-- <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+ -->
+    <link rel="stylesheet" type="text/css"
+        href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/login.css">
+    <script src="../static/js/jquery.min.js"></script>
+    <!-- 包括所有已编译的插件 -->
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+    <body>
+        <div class="container">
+
+
+            <!-- 主体内容 （登陆界面）-->
+            <div class="main">
+                <!-- 左侧信息栏 -->
+                <!-- <div class="sideleft">
+                    <h1>海量品牌    信息共享</h1>
+                    <h4>数据结合商业 让大数据发挥大价值</h4>
+                    </br></br></br>
+                    <p>精准营销、数据化管理，提升管理水平。</p>
+                    <p>打造线上线下数字一体化。</p>
+                    <p>双选平台，建立工厂与经销商双向选择平台。</p>
+                    <p>服务市场，塑造经销商信用等级，为其提供相应的金融服务。</p>
+
+                </div> -->
+                <!-- 右侧登陆界面 -->
+                <div class="sideright">
+                    <div class="index">
+                        <form action="doLogin" method="post">
+                            <p class="headline">用户登陆</p>
+                            <p class="astyle">用户名：</p>
+                            <input type="text" placeholder="请输入您的账号" id="username" name="username" required="true"> 
+                            <p class="astyle">密码：</p>
+                            <input type="password" placeholder="请输入密码" id="password" name="password" required="true">
+                            <!-- 错误提示信息栏 -->
+                            <div class="text-center" id="error_box" style="color:red"><p th:text="${session.errormsg}">[]</p></div>
+                            <input type="submit" value="登陆" id="login">
+                            </br>
+                            <p class="cstyle">没有账号？<a href="register">立即注册</a></p>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- 尾部 -->
+            <!-- <div class="footer">
+                <ul>
+                    <li><a href="#">关于我们</a></li>
+                    <li><a href="#">诚聘人才</a></li>
+                    <li><a href="#">联系商家</a></li>
+                    <li><a href="#">广告服务</a></li>
+                </ul>
+
+            </div> -->
+
+        </div>
+
+
+    </body>
+    <script>
+        /* $(function () {
+            $("#login").click(function () {
+                // 处理表单验证和交给后台处理的逻辑
+                var oError = document.getElementById("error_box");
+                var username = $("#username").val();
+                var password = $("#password").val();
+                //var isNotError = true;
+                if (username == "") {
+                    oError.innerHTML = "用户名为空 ";
+                    //isNotError = false;
+                    $("#username").focus();
+                    return;
+                }
+                else if (password == "") {
+                    oError.innerHTML = "密码为空 ";
+                    //isNotError = false;
+                    $("#password").focus();
+                    return;
+                }
+                $.ajax({
+                    type: "GET",
+                    async: false, //同步请求将会锁住浏览器，其他操作须等请求完成才可执行
+                    url: "hive2/login",
+                    dataType: "json",
+                    data: { "username": username, "password": password },
+                    //data:dataString,
+                    success: function (result) {
+                        //登录成功
+                        debugger;
+                        if (result.code == "YES") {
+                            //页面跳转
+                            window.location.href = "doLogin/"+username;
+
+                        }
+                        else if (result.code == "NO") {
+                            oError.innerHTML = "密码错误 ";
+
+                        } else if (result.code == "No Username") {
+                            oError.innerHTML = "用户名不存在 ";
+
+                        }
+
+                    }
+
+                });
+
+            });
+        }); */
+        //判断是否敲击了Enter键
+        $(document).keyup(function (event) {
+            if (event.keyCode == 13) {
+                $("#login").trigger("click");
+            }
+        });
+    </script>
+
+</html>

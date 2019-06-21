@@ -1,0 +1,26 @@
+server:
+  port: 8088
+  
+  tomcat:
+    uri-encoding: utf-8
+hive:
+  url: jdbc:hive2://192.168.32.128:10000/sogou
+  driver-class-name: org.apache.hive.jdbc.HiveDriver
+  user: hadoop
+  password: hadoop
+  
+#Spring配置
+spring:
+  thymeleaf:
+    mode: LEGACYHTML5
+    encoding: UTF-8
+           # 开发时关闭缓存,不然没法看到实时页面
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+  servlet:
+    multipart:
+      # 上传单个文件的最大值
+      max-file-size: 200MB
+      # 上传文件总的最大值
+      max-request-size: 200MB

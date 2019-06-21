@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+    <meta charset="utf-8" />
+    <!-- 引入 Bootstrap -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+ -->
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <!-- 包括所有已编译的插件 -->
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../static/js/echarts.min.js"></script>
+    <script src="../static/js/jquery.bootgrid.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/css/jquery.bootgrid.min.css">
+    <link rel="stylesheet" type="text/css"
+        th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css}">
+</head>
+
+<body>
+    <!-- <div class="h1 text-center">Welcome</div>
+    <div class="h1 text-center">User analysis</div> -->
+
+    <!-- 2.为ECharts准备一个具备大小（宽高）的Dom -->
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <div id="userPie" style="width: 530px; height: 530px;"></div>
+        </div>
+        <div class="col-md-6">
+            <div id="urlPie" style="width: 530px; height: 530px;"></div>
+        </div>        
+    </div>
+
+    <script type="text/javascript">
+        //更换暗色主题
+        var myChart = echarts.init(document.getElementById('userPie'), "dark");
+
+        //3.初始化，默认显示标题，图例和xy空坐标轴
+        myChart.setOption({
+
+            title: {
+                text: '用户查询数占比'
+            },
+            tooltip: {
+                show: true,
+                //触发类型为数据项图形触发
+                trigger: 'item',
+                //提示框浮层内容格式器,支持字符串模板和回调函数两种形式
+                //饼图、仪表盘、漏斗图:{a}（系列名称），{b}（数据项名称），{c}（数值）, {d}（百分比）
+                formatter: "用户查询次数为{b} : {c} ({d}%)"
+            },
+            series: [{
+                name: '查询次数',
+                type: 'pie',
+                data: []
+            }]
+        });
+
+        //4.设置加载动画(非必须)
+        myChart.showLoading(); //数据加载完之前先显示一段简单的loading动画
+
+        //6.ajax发起数据请求
+        $.ajax({
+            type: "get",
+            async: true, //异步请求（同步请求将会锁住浏览器，其他操作须等请求完成才可执行）
+            url: "hive2/qryUserCount/log_sample", //请求发送到TestServlet
+            data: {},
+            dataType: "json", //返回数据形式为json
+
+            //7.请求成功后接收数据name+num两组数据
+            success: function (result) {
+                //result为服务器返回的json对象
+                if (result) {
+
+                    myChart.hideLoading(); //隐藏加载动画
+
+                    //9.覆盖操作-根据数据加载数据图表
+                    myChart.setOption({
+                        title: {
+                            text: '用户查询数占比'
+                        },
+                        tooltip: {
+                            //触发类型为数据项图形触发
+                            trigger: 'item',
+                            //提示框浮层内容格式器,支持字符串模板和回调函数两种形式
+                            //饼图、仪表盘、漏斗图:{a}（系列名称），{b}（数据项名称），{c}（数值）, {d}（百分比）
+                            formatter: "用户查询次数为{b} : {c} ({d}%)"
+                        },
+                        calculable: true,
+
+                        series: [{
+                            name: '查询次数',
+                            type: 'pie',
+                            data: result,
+                            label: {
+                                show: true,
+                                position: 'outside',
+                                //color: '#fff'
+                                radius: [0, '75%'],
+                                center: ['50%', '50%'],
+                            }
+                        }]
+
+                    });
+
+                }
+
+            },
+            error: function (errorMsg) {
+                //请求失败时执行该函数
+                alert("图表请求数据失败!");
+                myChart.hideLoading();
+            }
+        })
+    </script>
+
+    <script type="text/javascript">
+
+        this.rowCount = 10000;
+        
+        //更换暗色主题
+        var urlChart = echarts.init(document.getElementById('urlPie'), "dark");
+
+        //3.初始化，默认显示标题，图例和xy空坐标轴
+        urlChart.setOption({
+
+            title: {
+                text: '查询词为URL的占比'
+            },
+            tooltip: {
+                show: true,
+                //触发类型为数据项图形触发
+                trigger: 'item',
+                //提示框浮层内容格式器,支持字符串模板和回调函数两种形式
+                //饼图、仪表盘、漏斗图:{a}（系列名称），{b}（数据项名称），{c}（数值）, {d}（百分比）
+                formatter: "{b} : {c} ({d}%)"
+            },
+            series: [{
+                name: '',
+                type: 'pie',
+                data: []
+            }]
+        });
+
+        //4.设置加载动画(非必须)
+        urlChart.showLoading(); //数据加载完之前先显示一段简单的loading动画
+
+        // $.ajax({
+        //     type: "get",
+        //     async: true, //异步请求（同步请求将会锁住浏览器，其他操作须等请求完成才可执行）
+        //     url: "hive2/qryRowCount/log_sample", //请求发送到TestServlet
+        //     data: {},
+        //     dataType: "json", //返回数据形式为json
+
+        //     //7.请求成功后接收数据name+num两组数据
+        //     success: function (result) {
+        //         //result为服务器返回的json对象
+        //         if (result) {
+        //             this.rowCount = result;
+        //         }
+        //     }.bind(this),
+        //     error: function (errorMsg) {
+        //         //请求失败时执行该函数
+        //         alert("查询表总行数失败!");
+        //     }
+        // })
+
+        //6.ajax发起数据请求
+        $.ajax({
+            type: "get",
+            async: true, //异步请求（同步请求将会锁住浏览器，其他操作须等请求完成才可执行）
+            url: "hive2/qryUrlCount/log_sample", //请求发送到TestServlet
+            data: {},
+            dataType: "json", //返回数据形式为json
+
+            //7.请求成功后接收数据name+num两组数据
+            success: function (result) {
+                //result为服务器返回的json对象
+                if (result) {
+                    var obj = { 'name':'查询词不为url' , 'value': this.rowCount - result[0].value };
+                    result.push(obj);
+                    urlChart.hideLoading(); //隐藏加载动画
+
+                    //9.覆盖操作-根据数据加载数据图表
+                    urlChart.setOption({
+                        title: {
+                            text: '查询词为URL的占比'
+                        },
+                        tooltip: {
+                            //触发类型为数据项图形触发
+                            trigger: 'item',
+                            //提示框浮层内容格式器,支持字符串模板和回调函数两种形式
+                            //饼图、仪表盘、漏斗图:{a}（系列名称），{b}（数据项名称），{c}（数值）, {d}（百分比）
+                            formatter: "{b} : {c} ({d}%)"
+                        },
+                        calculable: true,
+
+                        series: [{
+                            name: '',
+                            type: 'pie',
+                            data: result,
+                            label: {
+                                show: true,
+                                position: 'outside',
+                                //color: '#fff'
+                                radius: [0, '75%'],
+                                center: ['50%', '50%'],
+                            }
+                        }]
+
+                    });
+
+                }
+
+            }.bind(this),
+            error: function (errorMsg) {
+                //请求失败时执行该函数
+                alert("图表请求数据失败!");
+                urlChart.hideLoading();
+            }
+        })
+    </script>
+
+</body>
+
+</html>

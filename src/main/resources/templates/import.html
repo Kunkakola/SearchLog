@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>登陆界面</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- 本地资源导入出现问题，导入成功但是不生效  -->
+    <!-- <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+ -->
+    <link rel="stylesheet" type="text/css"
+        th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" href="../static/css/Import.css">
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <!-- 包括所有已编译的插件 -->
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+    <body>
+        <div class="container">
+
+
+            <!-- 主体内容 （登陆界面）-->
+            <div class="main">
+                <!-- 左侧信息栏 -->
+                <!-- <div class="sideleft">
+                    <h1>海量品牌    信息共享</h1>
+                    <h4>数据结合商业 让大数据发挥大价值</h4>
+                    </br></br></br>
+                    <p>精准营销、数据化管理，提升管理水平。</p>
+                    <p>打造线上线下数字一体化。</p>
+                    <p>双选平台，建立工厂与经销商双向选择平台。</p>
+                    <p>服务市场，塑造经销商信用等级，为其提供相应的金融服务。</p>
+
+                </div> -->
+                <!-- 右侧登陆界面 -->
+                <div class="sideright">
+                    <div class="index">
+                        <form action="doImport" method="post" enctype="multipart/form-data">
+                            <p class="headline">文件导入</p>
+                            <p class="astyle">文件选择：</p>
+                            <input type="file" id="file" name="file"> 
+                            <!-- 错误提示信息栏 -->
+                            <div class="text-center" id="error_box" style="color:rgb(204, 38, 38)"><p th:text="${session.errormsg}">[]</p></div>
+                            <input type="submit" value="导入" id="import">
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </body>
+    <script>
+        //判断是否敲击了Enter键
+        $(document).keyup(function (event) {
+            if (event.keyCode == 13) {
+                $("#import").trigger("click");
+            }
+        });
+    </script>
+
+</html>
